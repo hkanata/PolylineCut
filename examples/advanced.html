@@ -27,6 +27,7 @@
                     map: map,
                     strokeColor: '#ff0000',
                     strokeOpacity: 0.6,
+                    toba: "aeeee",
                     strokeWeight: 4,
                     path: [
                         new google.maps.LatLng(-19.9264,-43.95146),
@@ -53,13 +54,8 @@
                 addListeners();
                 polyline.edit();
 
-                //HERE IS THE POLYLINE CUT
-                //EXAMPLES
-                //$( "#map" ).polylineCut({hideAfterCut: true, thePolyline: polyline, drawingControl:true, drawingMode:"POLYGON"});
-                //$( "#map" ).polylineCut({hideAfterCut: false, thePolyline: polyline, drawingControl:false, drawingMode:"POLYGON"});
-                //$( "#map" ).polylineCut({thePolyline: polyline, drawingControl:true});
-                $( "#map" ).polylineCut({thePolyline: polyline, drawingControl:true});
-                //EXAMPLES
+                //polyline.cut({hideAfterCut: true, drawingControl: false, drawingMode:"POLYGON"});
+                polyline.cut({hideAfterCut: true, drawingControl: true});
 
             }
 

@@ -11,84 +11,70 @@
 
 var allDrawingManager = [];
 var drawingManager;
-var polylineNonDeleted = [];
+
 (function($) {
-    $.fn.polylineCut = function(options) {
-        if (this == null) {
-            console.error("Erro ao carregar o mapa");return;
-        }
-        
-        if(options.thePolyline==null){
-            console.error("Polyline não existe");return;
-        }
-        var theMap;
-        var defaults = {
-            drawingControl: false,
-            drawingMode: null,
-            hideAfterCut: true
-        };
-        var settings = $.extend({}, defaults, options);
-        var init = function() {
-            theMap = settings.thePolyline.getMap();
 
-            if (settings.drawingMode == "POLYGON") {
-                settings.drawingMode = google.maps.drawing.OverlayType.POLYGON;
+    google.maps.Polyline.prototype.cut = function(obj) {
+        var theMap = this.getMap();
+        var polyGlob = this;
+
+        var thisDrawingMode = null;
+        if (obj.drawingMode == "POLYGON") {
+            thisDrawingMode = google.maps.drawing.OverlayType.POLYGON;
+        }
+
+        var thisDrawingControlMode = false;
+        if (obj.drawingControl) {
+            thisDrawingControlMode = true;
+        }
+
+        var thishideAfterCut = true;
+        if (!obj.hideAfterCut) {
+            thishideAfterCut = false;
+        }
+
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: thisDrawingMode,
+            drawingControl: thisDrawingControlMode,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [
+                    google.maps.drawing.OverlayType.POLYGON
+                ]
+            },
+            circleOptions: {
+                fillColor: '#ffff00',
+                fillOpacity: 1,
+                strokeWeight: 5,
+                clickable: false,
+                editable: true,
+                zIndex: 1
             }
-
-            drawingManager = new google.maps.drawing.DrawingManager({
-                drawingMode: settings.drawingMode,
-                drawingControl: settings.drawingControl,
-                drawingControlOptions: {
-                    position: google.maps.ControlPosition.TOP_CENTER,
-                    drawingModes: [
-                        google.maps.drawing.OverlayType.POLYGON
-                    ]
-                },
-                circleOptions: {
-                    fillColor: '#ffff00',
-                    fillOpacity: 1,
-                    strokeWeight: 5,
-                    clickable: false,
-                    editable: true,
-                    zIndex: 1
-                }
-            });
-            drawingManager.setMap(theMap);
-            if (!settings.hideAfterCut)
-                allDrawingManager.push(drawingManager);
-
-        };
-
-        var setCompletePolygon = function() {
-            google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
-                polyline.edit(false);
-                for (var i = 0; i < polyline.getPath().getArray().length; i++) {
-                    if (!google.maps.geometry.poly.containsLocation(polyline.getPath().getArray()[i], polygon)) {
-                        polylineNonDeleted.push(new google.maps.LatLng(polyline.getPath().getArray()[i].lat(),
-                                polyline.getPath().getArray()[i].lng()));
-                    }
-                }
-                polyline.setMap(null);
-                polyline = new google.maps.Polyline({
-                    map: theMap,
-                    strokeColor: '#ff0000',
-                    strokeOpacity: 0.6,
-                    strokeWeight: 4,
-                    path: polylineNonDeleted
-                });
-                polyline.setMap(theMap);
-                addListeners();
-                polyline.edit();
-                polylineNonDeleted = [];
-
-                if (settings.hideAfterCut)
-                    polygon.setMap(null);
-            });
-        };
-
-        return this.each(function() {
-            init();
-            setCompletePolygon();
         });
-    };
-}(jQuery));
+        drawingManager.setMap(theMap);
+
+        if (!thishideAfterCut)
+            allDrawingManager.push(drawingManager);
+
+
+        google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
+            var polylineNonDeleted = [];
+            polyGlob.edit(false);
+            for (var i = 0; i < polyGlob.getPath().getArray().length; i++) {
+                if (!google.maps.geometry.poly.containsLocation(polyGlob.getPath().getArray()[i], polygon)) {
+                    polylineNonDeleted.push(new google.maps.LatLng(polyGlob.getPath().getArray()[i].lat(),
+                            polyGlob.getPath().getArray()[i].lng()));
+                }
+            }
+            for (var i = 0; i < polyGlob.getPath().getArray().length; i++) {
+                polyGlob.getPath().removeAt(i);
+            }
+            polyGlob.setPath(polylineNonDeleted);
+            polyGlob.edit();
+            if (thishideAfterCut)
+                polygon.setMap(null);
+        });
+
+    }
+}());
