@@ -4,7 +4,7 @@ Polyline cut for the Google Maps V3 API
 This library adds an `cut` method to the `google.maps.Polyline` class. When the polyline is in edit mode it shows up draggable markers for every point. Right clicking an existing marker will remove it. By default you will see transparent "ghost" markers. Click and drag them to add new points to the polyline. 
 
 
-![Screenshot](https://github.com/hkanata/PolylineCut/google.maps.polyline.edit/raw/master/screenshot.png)
+![Screenshot](https://github.com/hkanata/PolylineCut/blob/master/screenshot.png)
 
 
 ### Examples ###
@@ -13,7 +13,7 @@ This library adds an `cut` method to the `google.maps.Polyline` class. When the 
 * <script type="text/javascript" src="../src/polyline.edit.js"></script>
 * <script type="text/javascript" src="../src/polyline.cut.js"></script>
 
-* [Default example](http://opba.com.br/polylinecut/examples/default.html)
+* [Default example](http://opba.com.br/polylinecut/examples/advanced.html)
 
 
 ### Basic Usage ###
