@@ -14,9 +14,9 @@ This library adds an `cut` method to the `google.maps.Polyline` class. When the 
 
 ### Basic Usage ###
 
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,drawing&amp;sensor=false"></script>
-<script type="text/javascript" src="../src/polyline.edit.js"></script>
-<script type="text/javascript" src="../src/polyline.cut.js"></script>
+http://maps.google.com/maps/api/js?libraries=geometry,drawing&amp;sensor=false
+/src/polyline.edit.js
+/src/polyline.cut.js
 
 ```javascript
 
